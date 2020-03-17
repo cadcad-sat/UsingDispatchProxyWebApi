@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace WebApi.Infrastructures.ExternalServices
 {
@@ -7,7 +8,7 @@ namespace WebApi.Infrastructures.ExternalServices
         public async Task<string> GetAsync()
         {
             await Task.Delay(1000);
-            throw new System.Exception("ExternalService Exception");
+            throw new ArgumentException("ExternalService Exception");
             return "api response";
         }
     }

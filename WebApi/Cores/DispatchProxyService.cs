@@ -26,24 +26,24 @@ namespace WebApi.Cores
         protected override object Invoke(MethodInfo method, object[] args)
         {
             int counter = 0;
-            var result = Repeater(counter, method, args);
+            var result = Repeater(counter, method, args).Result;
             return result;
         }
 
-        private object Repeater(int counter, MethodInfo method, object[] args)
+        private async Task<object> Repeater(int counter, MethodInfo method, object[] args)
         {
             try
             {
                 var result = method.Invoke(decorated, args);
                 if (result is Task resultTask)
-                    resultTask.Wait();
+                    await resultTask;
                 return result;
             }
-            catch (AggregateException)
+            catch (ArgumentException)
             {
                 counter++;
                 if (counter < 3)
-                    return Repeater(counter, method, args);
+                    return await Repeater(counter, method, args);
                 else
                     throw;
             }
